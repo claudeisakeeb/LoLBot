@@ -1,6 +1,13 @@
 import discord
 import random
 from discord.ext import commands
+import lol
+import requests
+import json
+
+with open("keys.txt", "r") as keys:
+    sample_text = keys.readline()
+    DISCORD_API_KEY = keys.readline()
 
 client = commands.Bot(command_prefix = "/")
 
@@ -9,10 +16,24 @@ async def on_ready():
     print("Bot is ready")
 
 @client.command()
-async def motd(ctx):
-    quotes = ["Pain",
-                    ]
-    await ctx.send(f"Message of the day: f{random.choice(quotes)}")
+async def quote(ctx, *args):
+    if len(args) not in (0,1):
+        await ctx.send("Please enter one or zero champions (no spaces or quotes)")
+    elif len(args) == 1:
+        message, img_key = lol.getChampionQuote(args[0])
+    else:
+        message, img_key = lol.getChampionQuote()
+    if img_key == False: 
+        await ctx.send(message)
+        return
+    champion_title = requests.get(f"http://ddragon.leagueoflegends.com/cdn/10.16.1/data/en_US/champion/{img_key}.json").json()["data"][img_key]["title"]
+    embed = discord.Embed(
+        title = f"{img_key} - {champion_title}",
+        description = message
+    )
+    embed.set_image(url = f"http://ddragon.leagueoflegends.com/cdn/10.16.1/img/champion/{img_key}.png")
+    await ctx.send(embed=embed)
+
 @client.command()
 async def ping(ctx):
     await ctx.send(f"Pong! {client.latency * 1000} ms")
@@ -50,4 +71,4 @@ async def img(ctx, *args):
         pass
 
 
-client.run("NzQyNjA3ODczMDUzNTU2ODE4.XzIleQ.5VYj1VFgPbK_mEK2wQRMna-_fFY")
+client.run(DISCORD_API_KEY)
