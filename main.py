@@ -17,23 +17,16 @@ async def on_ready():
 
 @client.command()
 async def quote(ctx, *args):
-    version = requests.get("https://ddragon.leagueoflegends.com/api/versions.json").json()[0]
-    if len(args) not in (0,1):
-        await ctx.send("Please enter one or zero champions (no spaces or quotes)")
-    elif len(args) == 1:
-        message, img_key = lol.getChampionQuote(args[0])
+    embed_title, img_url, quote = lol.getChampionQuote(args)
+    if embed_title == 404:
+        await ctx.send("Please enter a valid champion name (no apostrophes)")
     else:
-        message, img_key = lol.getChampionQuote()
-    if img_key == False: 
-        await ctx.send(message)
-        return
-    champion_title = requests.get(f"http://ddragon.leagueoflegends.com/cdn/{version}/data/en_US/champion/{img_key}.json").json()["data"][img_key]["title"]
-    embed = discord.Embed(
-        title = f"{img_key} - {champion_title}",
-        description = f"**{message}**"
-    )
-    embed.set_image(url = f"http://ddragon.leagueoflegends.com/cdn/{version}/img/champion/{img_key}.png")
-    await ctx.send(embed=embed)
+        embed = discord.Embed(
+            title = embed_title,
+            description = f"**{quote}**"
+        )
+        embed.set_image(url = img_url)
+        await ctx.send(embed=embed)
 
 @client.command()
 async def ping(ctx):
@@ -66,18 +59,15 @@ async def _8ball(ctx,*,question):
 
 @client.command()
 async def splash(ctx, *, args):
-    desired_skin = args.lower().replace(" ", "")
-    with open("all_champion_skins.json", "r") as f:
-        all_skins = json.load(f)
-        if desired_skin in all_skins:
-            champion, id, ogn, skinID = all_skins[desired_skin]
-            embed = discord.Embed(
-                title = f"{ogn} - #{skinID}"
-            )
-            embed.set_image(url = f"http://ddragon.leagueoflegends.com/cdn/img/champion/splash/{champion}_{id}.jpg")
-            await ctx.send(embed = embed)
-        else:
-            await ctx.send("Please enter a valid skin.")
+    embed_title, image_url = lol.getChampionSkin(args)
+    if image_url == False:
+        await ctx.send("Please enter a valid skin")
+    else:
+        embed = discord.Embed(
+            title = embed_title
+        )
+        embed.set_image(url = image_url)
+        await ctx.send(embed = embed)
 
 
 client.run(DISCORD_API_KEY)
