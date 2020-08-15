@@ -2,6 +2,7 @@ import requests
 import json
 
 #Gets all champion skins in the current version of data dragon and puts them in 'all_champion_skins.json'
+#The format is "key-ified skin name" --> [champion name, skin photo id, original skin name, skin ID]
 
 with open("all_champion_skins.json", "r") as f:
     champion_skin_dict = {}
