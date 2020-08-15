@@ -17,6 +17,7 @@ async def on_ready():
 
 @client.command()
 async def quote(ctx, *args):
+    version = requests.get("https://ddragon.leagueoflegends.com/api/versions.json").json()[0]
     if len(args) not in (0,1):
         await ctx.send("Please enter one or zero champions (no spaces or quotes)")
     elif len(args) == 1:
@@ -26,12 +27,12 @@ async def quote(ctx, *args):
     if img_key == False: 
         await ctx.send(message)
         return
-    champion_title = requests.get(f"http://ddragon.leagueoflegends.com/cdn/10.16.1/data/en_US/champion/{img_key}.json").json()["data"][img_key]["title"]
+    champion_title = requests.get(f"http://ddragon.leagueoflegends.com/cdn/{version}/data/en_US/champion/{img_key}.json").json()["data"][img_key]["title"]
     embed = discord.Embed(
         title = f"{img_key} - {champion_title}",
-        description = message
+        description = f"**{message}**"
     )
-    embed.set_image(url = f"http://ddragon.leagueoflegends.com/cdn/10.16.1/img/champion/{img_key}.png")
+    embed.set_image(url = f"http://ddragon.leagueoflegends.com/cdn/{version}/img/champion/{img_key}.png")
     await ctx.send(embed=embed)
 
 @client.command()
@@ -64,11 +65,19 @@ async def _8ball(ctx,*,question):
     await ctx.send(f"Question: {question}\nAnswer: {random.choice(responses)}")
 
 @client.command()
-async def img(ctx, *args):
-    if len(args) != 1:
-        await ctx.send("Please name 1 champion")
-    else:
-        pass
+async def splash(ctx, *, args):
+    desired_skin = args.lower().replace(" ", "")
+    with open("all_champion_skins.json", "r") as f:
+        all_skins = json.load(f)
+        if desired_skin in all_skins:
+            champion, id, ogn, skinID = all_skins[desired_skin]
+            embed = discord.Embed(
+                title = f"{ogn} - #{skinID}"
+            )
+            embed.set_image(url = f"http://ddragon.leagueoflegends.com/cdn/img/champion/splash/{champion}_{id}.jpg")
+            await ctx.send(embed = embed)
+        else:
+            await ctx.send("Please enter a valid skin.")
 
 
 client.run(DISCORD_API_KEY)
