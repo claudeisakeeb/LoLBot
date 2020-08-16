@@ -53,3 +53,12 @@ def getChampionSkin(args):
             return title, image_url
         else:
             return 404, False
+
+def generateRandomItem():
+    version = requests.get("https://ddragon.leagueoflegends.com/api/versions.json").json()[0]
+    items = requests.get(f"http://ddragon.leagueoflegends.com/cdn/{version}/data/en_US/item.json").json()["data"]
+    item = random.choices(list(items.keys()))[0]
+    img_url = f"http://ddragon.leagueoflegends.com/cdn/{version}/img/item/{item}.png"
+    return items[item]["name"], img_url
+
+generateRandomItem()
