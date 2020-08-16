@@ -61,7 +61,12 @@ async def pfp(ctx, *args):
 
 @client.command()
 async def hecarim(ctx):
-    await ctx.send("*clop clop*")
+    responses = [
+        "*clop clop*",
+        "*neighs*",
+        "*glares menacingly*"
+    ]
+    await ctx.send(random.choice(responses))
 
 @client.event
 async def on_ready():
@@ -145,7 +150,7 @@ async def trivia(ctx, *args):
                 update_embed.cancel()
                 continue
         embed = discord.Embed(
-            title = f"Score Report for {ctx.author}'s quiz",
+            title = f"Score Report for {ctx.author}'s quiz"
         )
         embed.set_thumbnail(url=ctx.author.avatar_url)
         embed.add_field(name="Correct Questions", value = correct, inline = False)
