@@ -57,8 +57,27 @@ def getChampionSkin(args):
 def generateRandomItem():
     version = requests.get("https://ddragon.leagueoflegends.com/api/versions.json").json()[0]
     items = requests.get(f"http://ddragon.leagueoflegends.com/cdn/{version}/data/en_US/item.json").json()["data"]
-    item = random.choices(list(items.keys()))[0]
+    item = random.choice(list(items.keys()))
     img_url = f"http://ddragon.leagueoflegends.com/cdn/{version}/img/item/{item}.png"
     return items[item]["name"], img_url
+
+def generateRandomChampionSpell():
+    version = requests.get("https://ddragon.leagueoflegends.com/api/versions.json").json()[0]
+    with open("all_champion_spells.json", "r") as f:
+        data = json.load(f)
+        champion = random.choice(list(data.keys()))
+        spell_index = random.choice([0,1,2,3,4])
+        if spell_index == 4:
+            img_url = f"http://ddragon.leagueoflegends.com/cdn/{version}/img/passive/{data[champion][spell_index]}"
+        else:
+            img_url = f"http://ddragon.leagueoflegends.com/cdn/{version}/img/spell/{data[champion][spell_index]}"
+
+    champion_output = [champion[0]]
+    for c in champion[1:]:
+        if c == c.upper():
+            champion_output.append(" ")
+        champion_output.append(c)
+
+    return "".join(champion_output), img_url
 
 generateRandomItem()

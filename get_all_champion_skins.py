@@ -12,6 +12,7 @@ for champion in all_champions:
     for skin in champion_skins:
         key = champion.lower().replace(" ", "") if skin["name"] == "default" else skin["name"].lower().replace(" ", "")
         champion_skin_dict[key] = [champion, skin["num"], f"Classic {champion}" if skin["name"] == "default" else skin["name"], skin["id"]]
+        
 
 with open("all_champion_skins.json", "w") as f:
     json.dump(champion_skin_dict, f)

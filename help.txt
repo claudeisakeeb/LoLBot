@@ -1,0 +1,10 @@
+:a: General Commands:
+    :horse: /hecarim: Use at your own peril
+    :horse: /8ball [question]: Answers your question with 100% accuracy
+    :horse: /pfp [valid user mention]: Sends the mentioned user's discord avatar
+    :horse: /ping: Gives the bot's latency to the server
+
+:b: League of Legends Commands:
+    :fire: /quote [*optional* champion]: Generates a random champion of a champion (if provided, otherwise the champion is picked randomly)
+    :fire: /splash [champion]: Sends the splash art of a champion/champion skin
+    :fire: /trivia [('item'/'champion')] [number of rounds (1-15)] [*optional* time limit per question (1-15)]:  Starts a quiz for League of Legends items/champions

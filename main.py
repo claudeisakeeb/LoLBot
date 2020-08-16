@@ -68,6 +68,13 @@ async def hecarim(ctx):
     ]
     await ctx.send(random.choice(responses))
 
+client.remove_command("help")
+@client.command()
+async def help(ctx):
+    with open("help.txt", "r") as f:
+        await ctx.author.send("".join(f.readlines()))
+    await ctx.send(f"{ctx.author.mention} DM sent! :100:")
+
 @client.event
 async def on_ready():
     print("Bot is ready")
@@ -108,8 +115,8 @@ async def trivia(ctx, *args):
             timeLimit = 10
         else:
             quizType, quizLength, timeLimit = args
-        if quizType not in ("item", "spell"):
-            await ctx.send("Please enter a valid quiz type (item/spell)")
+        if quizType not in ("item", "champion"):
+            await ctx.send("Please enter a valid quiz type (item/champion)")
             return
         elif not quizLength.isdigit() or int(quizLength) < 1 or int(quizLength) > 15:
             await ctx.send("Please enter a valid integer for the trivia length (1-15)")
@@ -119,7 +126,7 @@ async def trivia(ctx, *args):
 
         def check(author):
             def inner_check(message):
-                return message.author == author and message.content.lower() == quizWord.lower()
+                return message.author == author and message.content.lower().replace("'", "") == quizWord.lower()
             return inner_check
         
         @tasks.loop(seconds = 1, count = timeLimit)
@@ -128,10 +135,19 @@ async def trivia(ctx, *args):
             tempTimeLimit -= 1
             await original.edit(content = f"Time left: {tempTimeLimit}")
 
+        functions = {
+            "item": lol.generateRandomItem,
+            "champion": lol.generateRandomChampionSpell
+        }
+        intros = {
+            "item": "Given an item's store icon, guess the item's name!",
+            "champion": "Given a champion's passive or spell, guess the champion!"
+        }
+        await ctx.send(intros[quizType])
         quizLength, timeLimit = int(quizLength), int(timeLimit)
         correct = 0
         for i in range(1, quizLength+1):
-            item, img_url = lol.generateRandomItem()
+            item, img_url = functions[quizType]()
             quizWord = item
             print(quizWord)
             embed = discord.Embed(title = f"Question {i}")
@@ -146,7 +162,7 @@ async def trivia(ctx, *args):
                 await original.edit(content = f"Correct! The answer is '{quizWord}'")
                 correct +=1
             except asyncio.TimeoutError:
-                await original.edit(content = "Times up!")
+                await original.edit(content = f"Times up! The correct answer was '{quizWord}'")
                 update_embed.cancel()
                 continue
         embed = discord.Embed(
