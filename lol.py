@@ -84,8 +84,8 @@ def getSummonerInfo(args):
          "euw": "EUW1",
          "jp": "JP1",
          "kr": "KR",
-         "las": "LA1",
-         "lan": "LA2",
+         "las": "LA2",
+         "lan": "LA1",
          "na": "NA1",
          "oce": "OC1",
          "ru": "RU",
@@ -105,7 +105,6 @@ def getSummonerInfo(args):
     pfp_url = f"http://ddragon.leagueoflegends.com/cdn/{version}/img/profileicon/{data['profileIconId']}.png"
     all_ranked_info = requests.get(f"https://{regions[region]}.api.riotgames.com/lol/league/v4/entries/by-summoner/{data['id']}?api_key={LOL_API_KEY}").json()
     all_champion_info = requests.get(f"https://{regions[region]}.api.riotgames.com/lol/champion-mastery/v4/champion-masteries/by-summoner/{data['id']}?api_key={LOL_API_KEY}").json()
-    print(all_champion_info[0])
     for ranked in all_ranked_info:
         if ranked["queueType"] == "RANKED_SOLO_5x5":
             ranked_info = ranked
@@ -117,7 +116,7 @@ def getSummonerInfo(args):
     )
     embed.set_thumbnail(url=pfp_url)
     embed.add_field(name="Rank:", value= f"{ranked_info['tier']} {ranked_info['rank']} - {ranked_info['leaguePoints']} LP" if ranked_info != "None" else ranked_info)
-    embed.add_field(name="Winrate:", value = f"W: {ranked_info['wins']} L: {ranked_info['losses']} ({round(ranked_info['wins']/(ranked_info['wins'] + ranked_info['losses']) * 100)}%)", inline = False)
+    embed.add_field(name="Winrate:", value = f"W: {ranked_info['wins']} L: {ranked_info['losses']} ({round(ranked_info['wins']/(ranked_info['wins'] + ranked_info['losses']) * 100)}%)" if ranked_info != "None" else ranked_info, inline = False)
     top_champions = ""
     with open("all_champions_by_id.json", "r") as f:
         data = json.load(f)
