@@ -1,1 +1,1 @@
-Summoner lookup
+Improve summoner look up, try adding match history (?)
