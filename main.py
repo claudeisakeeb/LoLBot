@@ -47,7 +47,7 @@ async def _8ball(ctx,*,question):
 @client.command()
 async def pfp(ctx, *args):
     if len(args) != 1:
-        await ctx.send("Please format the command as '/pfp [valid user mention]'")
+        await ctx.send("Please format the command as '/pfp [VALID USER MENTION]'")
         return
     target = client.get_user(int(args[0][2:len(args[0])-1]))
     if target != None:
@@ -57,7 +57,7 @@ async def pfp(ctx, *args):
         embed.set_image(url=target.avatar_url)
         await ctx.send(embed = embed)
     else:
-        await ctx.send("Please format the command as '/pfp [valid user mention]'")
+        await ctx.send("Please format the command as '/pfp [VALID USER MENTION]'")
 
 @client.command()
 async def hecarim(ctx):
@@ -108,7 +108,7 @@ async def splash(ctx, *, args):
 @client.command()
 async def trivia(ctx, *args):
     if len(args) not in (2, 3):
-        await ctx.send("Please enter the command in the form \'/trivia [item/spell] [number of rounds (1-15)] [optional: time limit per question (1-15)]")
+        await ctx.send("Please enter the command in the form \'/trivia [ITEM/SPELL] [NUMBER OF ROUNDS (1-15)] [*OPTIONAL* TIME LIMIT PER QUESTION (1-15)]")
     else:
         if len(args) == 2:
             quizType, quizLength = args
@@ -173,5 +173,20 @@ async def trivia(ctx, *args):
         embed.add_field(name="Total Questions", value = quizLength, inline = False)
         embed.add_field(name="Total score", value = f"{correct}/{quizLength} = {correct/int(quizLength) * 100}%")
         await ctx.send(embed = embed)
+
+@client.command()
+async def summoner(ctx, *, args):
+    if len(args) < 2:
+        await ctx.send("Please format your command as '/summoner [REGION (BR / EUN / EUW / JP / KR / LA / NA / OCE / RU / TR)] [SUMMONER NAME]")
+    else:
+        result = lol.getSummonerInfo(args)
+        if result == "404region":
+            await ctx.send("Region not found. This bot supports: BR / EUN / EUW / JP / KR / LA / NA / OCE / RU / TR. Please try again.")
+        elif result == "404summonerEntry":
+            await ctx.send("Please enter a summoner name.")
+        elif result == "404summoner":
+            await ctx.send("Summoner not found in specified region. Please try again.")
+        else:
+            await ctx.send(embed = result)
 
 client.run(DISCORD_API_KEY)
