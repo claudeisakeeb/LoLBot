@@ -150,7 +150,7 @@ async def trivia(ctx, *args):
 
         def check(author):
             def inner_check(message):
-                return message.author == author and (message.content.lower().replace("'", "") == quizWord.lower() or (message.content.lower() == "wukong" and quizWord == "Monkey King"))
+                return message.author == author and (message.content.lower() == quizWord.lower() or (message.content.lower() == "wukong" and quizWord == "Monkey King"))
             return inner_check
         
         @tasks.loop(seconds = 1, count = timeLimit)
