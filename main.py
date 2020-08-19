@@ -75,6 +75,24 @@ async def help(ctx):
         await ctx.author.send("".join(f.readlines()))
     await ctx.send(f"{ctx.author.mention} DM sent! :100:")
 
+@client.command()
+async def role(ctx, *, args):
+    roles ={
+        "top": "Top",
+        "jungle": "Jungle",
+        "jg": "Jungle",
+        "mid": "Mid",
+        "bot": "Bot",
+        "adc": "Bot",
+        "supp": "Supp",
+        "support": "Supp"
+
+    }
+    if len(args) != 1 or args[0].lower() not in roles:
+        await ctx.send(f"{ctx.user.mention}, Invalid role.")
+    else:
+        await ctx.member.add_roles(roles[args[0].lower()])
+
 @client.event
 async def on_ready():
     print("Bot is ready")
