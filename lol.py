@@ -3,7 +3,7 @@ import json
 import random
 import discord
 
-with open("keys.txt", "r") as keys:
+with open("token.txt", "r") as keys:
     LOL_API_KEY = keys.readline()
 
 def getChampionQuote(args):

@@ -8,7 +8,7 @@ import asyncio
 import time
 from discord.ext import tasks
 
-with open("keys.txt", "r") as keys:
+with open("token.txt", "r") as keys:
     sample_text = keys.readline()
     DISCORD_API_KEY = keys.readline()
 
