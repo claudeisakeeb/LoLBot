@@ -87,7 +87,7 @@ async def role(ctx, *args):
         "supp": "Supp",
         "support": "Supp"
     }
-    if ctx.message.channel.id == 548391937653211136:
+    if ctx.message.channel.name == "bot-commands":
         if len(args) != 1 or args[0].lower() not in roles:
             await ctx.send(f"{ctx.author.mention}, Invalid role.")
         else:
@@ -133,7 +133,7 @@ async def splash(ctx, *, args):
 @client.command()
 async def trivia(ctx, *args):
     if len(args) not in (2, 3):
-        await ctx.send("Please enter the command in the form \'/trivia [ITEM/SPELL] [NUMBER OF ROUNDS (1-15)] [*OPTIONAL* TIME LIMIT PER QUESTION (1-15)]")
+        await ctx.send("Please enter the command in the form \'/trivia [ITEM/CHAMPION] [NUMBER OF ROUNDS (1-15)] [*OPTIONAL* TIME LIMIT PER QUESTION (1-15)]")
     else:
         if len(args) == 2:
             quizType, quizLength = args
@@ -151,7 +151,7 @@ async def trivia(ctx, *args):
 
         def check(author):
             def inner_check(message):
-                return message.author == author and message.content.lower().replace("'", "") == quizWord.lower()
+                return message.author == author and (message.content.lower().replace("'", "") == quizWord.lower() or (message.content.lower() == "wukong" and quizWord == "Monkey King"))
             return inner_check
         
         @tasks.loop(seconds = 1, count = timeLimit)

@@ -39,6 +39,8 @@ def getChampionQuote(args):
     return embed_title, img_url, quote
 
 def getChampionSkin(args):
+    if not len(args):
+        return 404, False
     desired_skin = args.lower().replace(" ", "")
     with open("all_champion_skins.json", "r") as f:
         all_skins = json.load(f)
