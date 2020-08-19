@@ -76,7 +76,7 @@ async def help(ctx):
     await ctx.send(f"{ctx.author.mention} DM sent! :100:")
 
 @client.command()
-async def role(ctx, *, args):
+async def role(ctx, *args):
     roles ={
         "top": "Top",
         "jungle": "Jungle",
@@ -86,7 +86,6 @@ async def role(ctx, *, args):
         "adc": "Bot",
         "supp": "Supp",
         "support": "Supp"
-
     }
     if len(args) != 1 or args[0].lower() not in roles:
         await ctx.send(f"{ctx.user.mention}, Invalid role.")
