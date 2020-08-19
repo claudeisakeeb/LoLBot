@@ -87,11 +87,18 @@ async def role(ctx, *args):
         "supp": "Supp",
         "support": "Supp"
     }
-    if len(args) != 1 or args[0].lower() not in roles:
-        await ctx.send(f"{ctx.author.mention}, Invalid role.")
-    else:
-        to_add = discord.utils.get(ctx.member.guild.roles, name = roles[args[0].lower()])
-        await ctx.member.add_roles(to_add)
+    if ctx.message.channel.id == 548391937653211136:
+        if len(args) != 1 or args[0].lower() not in roles:
+            await ctx.send(f"{ctx.author.mention}, Invalid role.")
+        else:
+            target_role = discord.utils.get(ctx.author.guild.roles, name = roles[args[0].lower()])
+            if target_role in ctx.author.roles:
+                await ctx.author.remove_roles(target_role)
+                await ctx.send(f"{ctx.author.mention} Role '{target_role}' removed successfully!")
+            else:
+                await ctx.author.add_roles(target_role)
+                await ctx.send(f"{ctx.author.mention} Role '{target_role}' added successfully!")
+        
 
 @client.event
 async def on_ready():

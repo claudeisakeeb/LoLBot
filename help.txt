@@ -3,6 +3,7 @@
     :horse: /8ball [QUESTION]: Answers your question with 100% accuracy
     :horse: /pfp [VALID USER MENTION]: Sends the mentioned user's discord avatar
     :horse: /ping: Gives the bot's latency to the server
+    :horse: /role [ROLE]: Assigns you a server role
 
 :b: League of Legends Commands:
     :fire: /quote [*OPTIONAL* CHAMPION]: Generates a random quote of a champion (if champion isn't provided, the champion generated will be random.)
