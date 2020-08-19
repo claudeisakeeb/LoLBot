@@ -39,18 +39,18 @@ def getChampionQuote(args):
     return embed_title, img_url, quote
 
 def getChampionSkin(args):
-    if not len(args):
-        return 404, False
-    desired_skin = args.lower().replace(" ", "")
+    desired_skin = "".join(list(args)).lower()
     with open("all_champion_skins.json", "r") as f:
         all_skins = json.load(f)
         if desired_skin in all_skins:
             champion, id, ogn, skinID = all_skins[desired_skin]
-            title = f"{ogn} - #{skinID}"
-            image_url = f"http://ddragon.leagueoflegends.com/cdn/img/champion/splash/{champion}_{id}.jpg"
-            return title, image_url
+            embed = discord.Embed(
+                title = f"{ogn} - #{skinID}"
+            )
+            embed.set_image(url = f"http://ddragon.leagueoflegends.com/cdn/img/champion/splash/{champion}_{id}.jpg")
+            return embed
         else:
-            return 404, False
+            return 404
 
 def generateRandomItem():
     version = requests.get("https://ddragon.leagueoflegends.com/api/versions.json").json()[0]

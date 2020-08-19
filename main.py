@@ -119,15 +119,14 @@ async def quote(ctx, *args):
         await ctx.send(embed=embed)
 
 @client.command()
-async def splash(ctx, *, args):
-    embed_title, image_url = lol.getChampionSkin(args)
-    if embed_title == 404:
+async def splash(ctx, *args):
+    if not len(args):
+        await ctx.send("Please enter a valid skin")
+        return
+    embed = lol.getChampionSkin(args)
+    if embed == 404:
         await ctx.send("Please enter a valid skin")
     else:
-        embed = discord.Embed(
-            title = embed_title
-        )
-        embed.set_image(url = image_url)
         await ctx.send(embed = embed)
 
 @client.command()
