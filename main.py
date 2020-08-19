@@ -91,7 +91,8 @@ async def role(ctx, *, args):
     if len(args) != 1 or args[0].lower() not in roles:
         await ctx.send(f"{ctx.user.mention}, Invalid role.")
     else:
-        await ctx.member.add_roles(roles[args[0].lower()])
+        to_add = discord.utils.get(ctx.member.guild.roles, name = roles[args[0].lower()])
+        await ctx.member.add_roles(to_add)
 
 @client.event
 async def on_ready():
