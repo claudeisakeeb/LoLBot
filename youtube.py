@@ -24,9 +24,8 @@ def getYoutubeVideos(args):
         description = f"https://youtube.com/watch?v={item['id']['videoId']}\n"
         to_add = item["snippet"]["description"]
         description += f"{to_add[:min(len(to_add), 80)]}..."
-        embed.add_field(name=item["snippet"]["title"],value=description, inline=False)
+        embed.add_field(name=f"--{item['snippet']['title']}",value=description, inline=False)
+        
     if len(data) > 0:
         embed.set_image(url=data[0]["snippet"]["thumbnails"]["high"]["url"])
     return embed
-#request = client.search().list()
-#repsonse = request.execute()
