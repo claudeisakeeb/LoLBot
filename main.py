@@ -5,7 +5,7 @@ import lol
 import requests
 import json
 import asyncio
-import time
+import youtube
 from discord.ext import tasks
 
 with open("token.txt", "r") as keys:
@@ -213,4 +213,13 @@ async def summoner(ctx, *, args):
         else:
             await ctx.send(embed = result)
 
+@client.command(aliases=["youtube"])
+async def yt(ctx, *args):
+    if not len(args):
+        await ctx.send("Please format the command as '/youtube [SEARCH QUERY]'")
+        return
+    elif args[-1].isdigit() and not 1 <= int(args[-1]) <= 5:
+        await ctx.send("Max results query must be in the range [1, 5] inclusive")
+    embed = youtube.getYoutubeVideos(args)
+    await ctx.send(embed = embed)
 client.run(DISCORD_API_KEY)

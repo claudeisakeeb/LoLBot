@@ -4,6 +4,7 @@
     :horse: /pfp [VALID USER MENTION]: Sends the mentioned user's discord avatar
     :horse: /ping: Gives the bot's latency to the server
     :horse: /role [ROLE]: Assigns you a server role
+    :horse: /youtube [SEARCH QUERY] [*OPTIONAL* NUMBER OF RESULTS (1-5)]
 
 :b: League of Legends Commands:
     :fire: /quote [*OPTIONAL* CHAMPION]: Generates a random quote of a champion (if champion isn't provided, the champion generated will be random.)
