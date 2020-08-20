@@ -20,11 +20,11 @@ def getYoutubeVideos(args):
         title=f"Top {maxResults} results for '{' '.join(args)}':",
         colour=discord.Colour.red()
     )
-    for item in data:
-        description = f"https://youtube.com/watch?v={item['id']['videoId']}\n"
-        to_add = item["snippet"]["description"]
+    for i in range(len(data)):
+        description = f"https://youtube.com/watch?v={data[i]['id']['videoId']}\n"
+        to_add = data[i]["snippet"]["description"]
         description += f"{to_add[:min(len(to_add), 80)]}..."
-        embed.add_field(name=f"--{item['snippet']['title']}",value=description, inline=False)
+        embed.add_field(name=f"{i+1}) {data[i]['snippet']['title']}",value=description, inline=False)
         
     if len(data) > 0:
         embed.set_image(url=data[0]["snippet"]["thumbnails"]["high"]["url"])
