@@ -10,7 +10,7 @@ all_champions = requests.get(f"http://ddragon.leagueoflegends.com/cdn/{version}/
 for champion in all_champions:
     champion_skins = requests.get(f"http://ddragon.leagueoflegends.com/cdn/{version}/data/en_US/champion/{champion}.json").json()["data"][champion]["skins"]
     for skin in champion_skins:
-        key = champion.lower().replace(" ", "") if skin["name"] == "default" else skin["name"].lower().replace(" ", "")
+        key = champion.lower().replace(" ", "") if skin["name"] == "default" else skin["name"].lower().replace(" ", "").replace("'", "").replace("/", "")
         champion_skin_dict[key] = [champion, skin["num"], f"Classic {champion}" if skin["name"] == "default" else skin["name"], skin["id"]]
         
 
