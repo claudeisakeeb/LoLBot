@@ -130,7 +130,6 @@ def getChampionStats(args):
     embed.set_thumbnail(url=f"http://ddragon.leagueoflegends.com/cdn/{version}/img/champion/{champion}.png")
     embed.set_image(url=f"http://ddragon.leagueoflegends.com/cdn/img/champion/splash/{champion}_0.jpg")
     champion_spells = champion_info["spells"]
-    print(re.sub(r'<.*>', ' ', champion_spells[0]['description']))
     for i in range(len(champion_spells)):
         name=f"{spells[i]} - {champion_spells[i]['name']}"
         value=f"{re.sub(r'<.*>', ' ', champion_spells[i]['description'])}\n\nCooldown: {champion_spells[i]['cooldownBurn']}"
