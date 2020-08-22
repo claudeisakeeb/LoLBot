@@ -8,8 +8,14 @@ import asyncio
 import youtube
 from discord.ext import tasks
 import os
+import token
 
-DISCORD_API_KEY = os.environ["DISCORD_API_KEY"]
+try:
+    DISCORD_API_KEY = os.environ["DISCORD_API_KEY"]
+except KeyError:
+    with open("token.txt") as f:
+        sample_text = f.readline()
+        DISCORD_API_KEY = f.readline()
 
 client = commands.Bot(command_prefix = "/")
 

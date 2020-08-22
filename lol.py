@@ -3,8 +3,13 @@ import json
 import random
 import discord
 import os
+import token
 
-LOL_API_KEY = os.environ["LEAGUE_API_KEY"]
+try:
+    LOL_API_KEY = os.environ["LEAGUE_API_KEY"]
+except KeyError:
+    with open("token.txt") as f:
+        LOL_API_KEY = f.readline()
 
 def getChampionQuote(args):
     args = "".join(list(args))
