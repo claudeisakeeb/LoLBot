@@ -4,6 +4,7 @@ import random
 import discord
 import os
 import token
+import re
 
 try:
     LOL_API_KEY = os.environ["LEAGUE_API_KEY"]
@@ -129,12 +130,13 @@ def getChampionStats(args):
     embed.set_thumbnail(url=f"http://ddragon.leagueoflegends.com/cdn/{version}/img/champion/{champion}.png")
     embed.set_image(url=f"http://ddragon.leagueoflegends.com/cdn/img/champion/splash/{champion}_0.jpg")
     champion_spells = champion_info["spells"]
+    print(re.sub(r'<.*>', ' ', champion_spells[0]['description']))
     for i in range(len(champion_spells)):
         name=f"{spells[i]} - {champion_spells[i]['name']}"
-        value=f"{champion_spells[i]['description']}\n\nCooldown: {champion_spells[i]['cooldownBurn']}"
+        value=f"{re.sub(r'<.*>', ' ', champion_spells[i]['description'])}\n\nCooldown: {champion_spells[i]['cooldownBurn']}"
         embed.add_field(name=name, value=value, inline=False)
     embed.add_field(name="For a more comprehensive overview of champions:", value=f"https://na.leagueoflegends.com/en-us/champions//")
     return embed
 
-getChampionStats(("aatrox"))
+getChampionStats(("yone"))
     
