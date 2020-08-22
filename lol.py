@@ -11,38 +11,6 @@ except KeyError:
     with open("token.txt") as f:
         LOL_API_KEY = f.readline()
 
-def getChampionQuote(args):
-    args = "".join(list(args))
-    version = requests.get("https://ddragon.leagueoflegends.com/api/versions.json").json()[0]
-    corrected = {
-        "leesin": "LeeSin",
-        "drmundo": "DrMundo",
-        "masteryi": "MasterYi",
-        "missfortune": "MissFortune",
-        "reksai": "RekSai",
-        "monkeyking": "MonkeyKing",
-        "aurelionsol": "AurelionSol",
-        "tahmkench": "TahmKench"
-    }
-    with open("all_champion_quotes.json") as json_file:
-        data = json.load(json_file)
-        if args != "":
-            if args in data.keys():
-                champion = args
-                quote = random.choice(data[champion])
-            else:
-                return 404, False, False
-        else:
-            champion = random.choice(list(c for c in data.keys()))
-            quote = random.choice(data[champion])
-
-    img_key = champion[0].upper() + champion[1:].lower() if champion not in corrected else corrected[champion]
-    champion_title = requests.get(f"http://ddragon.leagueoflegends.com/cdn/{version}/data/en_US/champion/{img_key}.json").json()["data"][img_key]["title"]
-    embed_title = f"{img_key} - {champion_title}"
-    img_url = f"http://ddragon.leagueoflegends.com/cdn/{version}/img/champion/{img_key}.png"
-
-    return embed_title, img_url, quote
-
 def getChampionSkin(args):
     desired_skin = "".join(list(args)).lower().replace("'", "").replace("/", "")
     with open("all_champion_skins.json", "r") as f:
@@ -135,3 +103,38 @@ def getSummonerInfo(args):
     embed.add_field(name="Top Played Champions: ", value=top_champions if top_champions else "None")
     embed.add_field(name="For a more comprehensive overview:", value=f"https://{region}.op.gg/summoner/userName={summoner}", inline = False)
     return embed
+
+def getChampionStats(args):
+
+    spells = {
+        0: "Q",
+        1: "W",
+        2: "E",
+        3: "R"
+    }
+
+    args = "".join(list(args)).lower().replace("'", "")
+    version = requests.get("https://ddragon.leagueoflegends.com/api/versions.json").json()[0]
+    with open("all_champion_names.json", "r") as f:
+        data = json.load(f)
+        if args not in data:
+            return "404champion"
+    champion = data[args]
+    champion_info = requests.get(f"http://ddragon.leagueoflegends.com/cdn/{version}/data/en_US/champion/{champion}.json").json()["data"][champion]
+    embed = discord.Embed(
+        title = champion,
+        description=f"**{champion_info['title']}**",
+        colour=discord.Colour.blurple()
+    )
+    embed.set_thumbnail(url=f"http://ddragon.leagueoflegends.com/cdn/{version}/img/champion/{champion}.png")
+    embed.set_image(url=f"http://ddragon.leagueoflegends.com/cdn/img/champion/splash/{champion}_0.jpg")
+    champion_spells = champion_info["spells"]
+    for i in range(len(champion_spells)):
+        name=f"{spells[i]} - {champion_spells[i]['name']}"
+        value=f"{champion_spells[i]['description']}\n\nCooldown: {champion_spells[i]['cooldownBurn']}"
+        embed.add_field(name=name, value=value, inline=False)
+    embed.add_field(name="For a more comprehensive overview of champions:", value=f"https://na.leagueoflegends.com/en-us/champions//")
+    return embed
+
+getChampionStats(("aatrox"))
+    

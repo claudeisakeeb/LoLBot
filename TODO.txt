@@ -1,2 +1,1 @@
-Youtube skin lookup
-Improve summoner look up, try adding match history (?)
+champion look up (spells + stats)

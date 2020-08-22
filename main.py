@@ -104,25 +104,21 @@ async def role(ctx, *args):
                 await ctx.author.add_roles(target_role)
                 await ctx.send(f"{ctx.author.mention} Role '{target_role}' added successfully!")
         
+@client.command(aliases=["youtube"])
+async def yt(ctx, *args):
+    if not len(args):
+        await ctx.send("Please format the command as '/youtube [SEARCH QUERY]'")
+        return
+    elif args[-1].isdigit() and not 1 <= int(args[-1]) <= 5:
+        await ctx.send("Max results query must be in the range [1, 5] inclusive")
+    embed = youtube.getYoutubeVideos(args)
+    await ctx.send(embed = embed)
 
 @client.event
 async def on_ready():
     print("Bot is ready")
 
 #*******************LEAGUE OF LEGENDS RELATED COMMANDS/EVENTS***************************
-@client.command()
-async def quote(ctx, *args):
-    embed_title, img_url, quote = lol.getChampionQuote(args)
-    if embed_title == 404:
-        await ctx.send("Please enter a valid champion name (no apostrophes)")
-    else:
-        embed = discord.Embed(
-            title = embed_title,
-            description = f"**{quote}**"
-        )
-        embed.set_image(url = img_url)
-        await ctx.send(embed=embed)
-
 @client.command()
 async def splash(ctx, *args):
     if not len(args):
@@ -225,13 +221,12 @@ async def summoner(ctx, *, args):
         else:
             await ctx.send(embed = result)
 
-@client.command(aliases=["youtube"])
-async def yt(ctx, *args):
-    if not len(args):
-        await ctx.send("Please format the command as '/youtube [SEARCH QUERY]'")
-        return
-    elif args[-1].isdigit() and not 1 <= int(args[-1]) <= 5:
-        await ctx.send("Max results query must be in the range [1, 5] inclusive")
-    embed = youtube.getYoutubeVideos(args)
-    await ctx.send(embed = embed)
+@client.command()
+async def champion(ctx, *args):
+    embed = lol.getChampionStats(args)
+    if embed == "404champion":
+        await ctx.send("Please enter a valid champion.")
+    else:
+        await ctx.send(embed=embed)
+
 client.run(DISCORD_API_KEY)
