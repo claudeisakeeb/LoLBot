@@ -9,5 +9,5 @@
 :b: League of Legends Commands:
     :fire: /quote [*OPTIONAL* CHAMPION]: Generates a random quote of a champion (if champion isn't provided, the champion generated will be random.)
     :fire: /splash [CHAMPION / CHAMPION SKIN]: Sends the splash art of a champion/champion skin
-    :fire: /trivia [ITEM / CHAMPION] [NUMBER OF ROUNDS (1-15)] [*OPTIONAL* TIME LIMIT PER QUESTION (1-15)]:  Starts a quiz for League of Legends items/champions
+    :fire: /trivia [ITEM / CHAMPION] [NUMBER OF ROUNDS (1-20)] [*OPTIONAL* TIME LIMIT PER QUESTION (1-15)]:  Starts a quiz for League of Legends items/champions
     :fire: /summoner [REGION (BR / EUN / EUW / JP / KR / LA / NA / OCE / RU / TR)] [SUMMONER NAME]: Gives a brief overview of a summoner.

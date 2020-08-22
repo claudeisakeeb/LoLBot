@@ -134,7 +134,7 @@ async def splash(ctx, *args):
     else:
         await ctx.send(embed = embed)
 
-@client.command()
+@client.command(aliases=["quiz"])
 async def trivia(ctx, *args):
     if len(args) not in (2, 3):
         await ctx.send("Please enter the command in the form \'/trivia [ITEM/CHAMPION] [NUMBER OF ROUNDS (1-15)] [*OPTIONAL* TIME LIMIT PER QUESTION (1-15)]")
@@ -147,23 +147,24 @@ async def trivia(ctx, *args):
         if quizType not in ("item", "champion"):
             await ctx.send("Please enter a valid quiz type (item/champion)")
             return
-        elif not quizLength.isdigit() or int(quizLength) < 1 or int(quizLength) > 15:
-            await ctx.send("Please enter a valid integer for the trivia length (1-15)")
+        elif not quizLength.isdigit() or int(quizLength) < 1 or int(quizLength) > 20:
+            await ctx.send("Please enter a valid integer for the trivia length (1-20)")
             return
         elif len(args) == 3 and (not timeLimit.isdigit() or int(timeLimit) < 1 or int(timeLimit) > 15):
             await ctx.send("Please enter a valid integer for the question time limit (1-15)")
 
         def check(author):
             def inner_check(message):
+                if message.author == author and message.content == "quit":
+                    raise ValueError
                 return message.author == author and (message.content.lower() == quizWord.lower() or (message.content.lower() == "wukong" and quizWord == "Monkey King"))
             return inner_check
-        
+
         @tasks.loop(seconds = 1, count = timeLimit)
         async def update_embed():
             nonlocal tempTimeLimit
             tempTimeLimit -= 1
             await original.edit(content = f"Time left: {tempTimeLimit}")
-
         functions = {
             "item": lol.generateRandomItem,
             "champion": lol.generateRandomChampionSpell
@@ -172,7 +173,9 @@ async def trivia(ctx, *args):
             "item": "Given an item's store icon, guess the item's name!",
             "champion": "Given a champion's passive or spell, guess the champion!"
         }
+        quitMessage = "Type 'quit' to exit the quiz."
         await ctx.send(intros[quizType])
+        await ctx.send(quitMessage)
         quizLength, timeLimit = int(quizLength), int(timeLimit)
         correct = 0
         for i in range(1, quizLength+1):
@@ -194,6 +197,10 @@ async def trivia(ctx, *args):
                 await original.edit(content = f"Times up! The correct answer was '{quizWord}'")
                 update_embed.cancel()
                 continue
+            except ValueError:
+                await ctx.send(f"Quiz has been manually ended by {ctx.author.mention}.")
+                update_embed.cancel()
+                return
         embed = discord.Embed(
             title = f"Score Report for {ctx.author}'s quiz"
         )
