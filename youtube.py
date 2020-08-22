@@ -2,11 +2,9 @@ import requests
 import json
 import discord
 import urllib.parse
+import os
 
-with open("token.txt", "r") as f:
-    sample_text1 = f.readline()
-    sample_text2 = f.readline()
-    YOUTUBE_API_KEY = f.readline()
+YOUTUBE_API_KEY = os.environ["YOUTUBE_API_KEY"]
 
 def getYoutubeVideos(args):
     args = list(args)

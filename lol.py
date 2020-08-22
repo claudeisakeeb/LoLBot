@@ -2,9 +2,9 @@ import requests
 import json
 import random
 import discord
+import os
 
-with open("token.txt", "r") as keys:
-    LOL_API_KEY = keys.readline()
+LOL_API_KEY = os.environ["LEAGUE_API_KEY"]
 
 def getChampionQuote(args):
     args = "".join(list(args))

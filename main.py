@@ -7,10 +7,9 @@ import json
 import asyncio
 import youtube
 from discord.ext import tasks
+import os
 
-with open("token.txt", "r") as keys:
-    sample_text = keys.readline()
-    DISCORD_API_KEY = keys.readline()
+DISCORD_API_KEY = os.environ["DISCORD_API_KEY"]
 
 client = commands.Bot(command_prefix = "/")
 
